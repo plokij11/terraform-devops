@@ -1,35 +1,35 @@
 # Infrastructure — Terraform
 
-## Структура репозиторію
-- `providers.tf` — провайдери AWS, Cloudflare та S3 backend
-- `variables.tf` — всі змінні конфігурації
-- `main.tf` — основна інфраструктура
-- `outputs.tf` — виводи після apply
+## Repository Structure
+- `providers.tf` — AWS, Cloudflare providers and S3 backend configuration
+- `variables.tf` — all configuration variables
+- `main.tf` — main infrastructure
+- `outputs.tf` — outputs after apply
 
-## Інфраструктура
-- **web_server** — EC2, відкритий HTTP (80) та HTTPS (443) для всього світу
-- **app** — EC2, порт 8080 доступний лише з web_server
-- SSH доступ до обох серверів з вашого IP
-- Route53 Hosted Zone для `aws.vkazistov.pp.ua`
-- NS делегування з Cloudflare на AWS
+## Infrastructure
+- **web_server** — EC2, HTTP (80) and HTTPS (443) open to the world
+- **app** — EC2, port 8080 accessible only from web_server
+- SSH access to both servers from your IP
+- Route53 Hosted Zone for `aws.vkazistov.pp.ua`
+- NS delegation from Cloudflare to AWS
 
-## Передумови
+## Prerequisites
 - Terraform >= 1.0 (`brew install terraform`)
-- AWS CLI налаштований (`aws configure`)
-- S3 bucket `vkazistov-terraform-state` створений в `eu-north-1`
+- AWS CLI configured (`aws configure`)
+- S3 bucket `vkazistov-terraform-state` created in `eu-north-1`
 
-## Використання
+## Usage
 
-### Перший запуск
-1. Скопіюй `terraform.tfvars.example` → `terraform.tfvars` і заповни значення
+### First run
+1. Create `terraform.tfvars` and fill in the variable values according to `variables.tf`
 2. `terraform init`
-3. `terraform import aws_route53_zone.aws_subdomain <ZONE_ID>` (якщо зона вже існує)
+3. `terraform import aws_route53_zone.aws_subdomain <ZONE_ID>` (if the zone already exists)
 4. `terraform plan`
 5. `terraform apply`
 
-### Видалення інфраструктури
+### Destroy infrastructure
 `terraform destroy`
 
-## Важливо
-- Файл `terraform.tfvars` містить секрети — **не комітити в git**
-- State зберігається в S3: `vkazistov-terraform-state/infra/terraform.tfstate`
+## Important
+- `terraform.tfvars` contains secrets — **do not commit to git**
+- State is stored in S3: `vkazistov-terraform-state/infra/terraform.tfstate`
